@@ -60,7 +60,7 @@ def create_argparser():
 
 
 # parse the args
-args = create_argparser().parse_args()
+args, unknown = create_argparser().parse_known_args()
 
 path = Path(__file__).parent / "../.models.json"
 manager = ModelManager(path)
@@ -99,31 +99,31 @@ if args.vocoder_path is not None:
     vocoder_path = args.vocoder_path
     vocoder_config_path = args.vocoder_config_path
 
-if args.debug is False:
-    # load models
-    synthesizer = Synthesizer(
-        tts_checkpoint=model_path,
-        tts_config_path=config_path,
-        tts_speakers_file=speakers_file_path,
-        tts_languages_file=None,
-        vocoder_checkpoint=vocoder_path,
-        vocoder_config=vocoder_config_path,
-        encoder_checkpoint="",
-        encoder_config="",
-        use_cuda=args.use_cuda,
-    )
+# if args.debug is False:
+#     # load models
+#     synthesizer = Synthesizer(
+#         tts_checkpoint=model_path,
+#         tts_config_path=config_path,
+#         tts_speakers_file=speakers_file_path,
+#         tts_languages_file=None,
+#         vocoder_checkpoint=vocoder_path,
+#         vocoder_config=vocoder_config_path,
+#         encoder_checkpoint="",
+#         encoder_config="",
+#         use_cuda=args.use_cuda,
+#     )
 
-    use_multi_speaker = hasattr(synthesizer.tts_model, "num_speakers") and (
-        synthesizer.tts_model.num_speakers > 1 or synthesizer.tts_speakers_file is not None
-    )
+#     use_multi_speaker = hasattr(synthesizer.tts_model, "num_speakers") and (
+#         synthesizer.tts_model.num_speakers > 1 or synthesizer.tts_speakers_file is not None
+#     )
 
-    speaker_manager = getattr(synthesizer.tts_model, "speaker_manager", None)
-    # TODO: set this from SpeakerManager
-    use_gst = synthesizer.tts_config.get("use_gst", False)
-else:
-    speaker_manager = None
-    use_gst = False
-    use_multi_speaker =  False
+#     speaker_manager = getattr(synthesizer.tts_model, "speaker_manager", None)
+#     # TODO: set this from SpeakerManager
+#     use_gst = synthesizer.tts_config.get("use_gst", False)
+# else:
+speaker_manager = None
+use_gst = False
+use_multi_speaker =  False
 
 
 app = Flask(__name__)
@@ -199,4 +199,4 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    app.run(host='0.0.0.0')
