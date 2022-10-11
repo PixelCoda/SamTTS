@@ -16,6 +16,7 @@ pyyaml
 fsspec>=2021.04.0
 # deps for examples
 flask
+gunicorn==20.1.0
 # deps for inference
 pysbd
 # deps for notebooks
@@ -39,4 +40,3 @@ gruut[cs,de,es,fr,it,nl,pt,ru,sv]==2.2.3
 jamo
 nltk
 g2pkk>=0.1.1
-gunicorn
